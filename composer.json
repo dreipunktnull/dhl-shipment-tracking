@@ -1,0 +1,20 @@
+{
+  "name": "dreipunktnull/dhl-shipment-tracking",
+  "description": "DHL Shipment Tracking API",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Cedric Ziel",
+      "email": "ziel@dreipunktnull.com"
+    }
+  ],
+  "require": {
+    "php": "^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "DPN\\DHLShipmentTracking\\": "src/"
+    }
+  }
+}
