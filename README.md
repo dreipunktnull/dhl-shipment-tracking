@@ -23,7 +23,7 @@ $cig_password = ''; // developer password
 $tnt_user = 'dhl_entwicklerportal';
 $tnt_password = 'Dhl_123!';
 
-$credentials = new Credentials($cig_user, $cig_password, RequestBuilder::ENDPOINT_SANDBOX, $tnt_user, $tnt_password);
+$credentials = new Credentials($cig_user, $cig_password, Credentials::ENDPOINT_SANDBOX, $tnt_user, $tnt_password);
 
 $api = new ShipmentTracking($credentials);
 
