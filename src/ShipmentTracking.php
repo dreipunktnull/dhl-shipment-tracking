@@ -24,28 +24,31 @@ class ShipmentTracking
     /**
      * @param string $pieceNumber
      * @param string $language
+     * @return bool|string
      */
     public function getPiece(string $pieceNumber, string $language = RequestBuilder::LANG_EN)
     {
-        $this->call(static::OPERATION_GET_PIECE, $pieceNumber, $language);
+        return $this->call(static::OPERATION_GET_PIECE, $pieceNumber, $language);
     }
 
     /**
      * @param string $pieceNumber
      * @param string $language
+     * @return bool|string
      */
     public function getPieceDetail(string $pieceNumber, string $language = RequestBuilder::LANG_EN)
     {
-        $this->call(static::OPERATION_GET_PIECE_DETAIL, $pieceNumber, $language);
+        return $this->call(static::OPERATION_GET_PIECE_DETAIL, $pieceNumber, $language);
     }
 
     /**
      * @param string $pieceNumber
      * @param string $language
+     * @return bool|string
      */
     public function getPiecePublic(string $pieceNumber, string $language = RequestBuilder::LANG_EN)
     {
-        $this->callPublic(static::OPERATION_STATUS_PUBLIC, $pieceNumber, $language);
+        return $this->callPublic(static::OPERATION_STATUS_PUBLIC, $pieceNumber, $language);
     }
 
     /**
