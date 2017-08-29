@@ -9,12 +9,12 @@ composer require dreipunktnull/dhl-shipment-tracking
 ## Usage
 
 ```php
-/*
+/**
  * Creates a new Credentials object.
- * Uses the sandbox as default API.
  *
- * 
- * $tnt_password
+ * Uses the sandbox as default API where
+ *   - $tnt_user = track n trace user
+ *   - $tnt_password = track n trace password
  */
 
 $cig_user = ''; // your developer id
