@@ -10,7 +10,7 @@ composer require dreipunktnull/dhl-shipment-tracking
 
 ## Usage
 
-see [track.php](/blob/master/track.php)
+see [track.php](track.php)
 
 ## Changelog
 
