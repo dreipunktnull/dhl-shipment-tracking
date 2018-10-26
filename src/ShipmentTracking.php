@@ -2,10 +2,34 @@
 
 namespace DPN\DHLShipmentTracking;
 
+use GuzzleHttp\Client;
+
+/**
+ * Class ShipmentTracking
+ *
+ * @package DPN\DHLShipmentTracking
+ */
 class ShipmentTracking
 {
+
+    /**
+     * Action get piece
+     */
     const OPERATION_GET_PIECE = 'd-get-piece';
+
+    /**
+     * Action get piece detail
+     */
     const OPERATION_GET_PIECE_DETAIL = 'd-get-piece-detail';
+
+    /**
+     * Action get signature
+     */
+    const OPERATION_SIGNATURE = 'd-get-signature';
+
+    /**
+     * Action status for public user
+     */
     const OPERATION_STATUS_PUBLIC = 'get-status-for-public-user';
 
     /**
@@ -24,110 +48,125 @@ class ShipmentTracking
     /**
      * @param string $pieceNumber
      * @param string $language
-     * @return bool|string
+     *
+     * @return mixed
      */
-    public function getPiece(string $pieceNumber, string $language = RequestBuilder::LANG_EN)
+    public function getDetails(string $pieceNumber, string $language = RequestBuilder::LANG_EN)
     {
-        return $this->call(static::OPERATION_GET_PIECE, $pieceNumber, $language);
+        $data = $this->call(static::OPERATION_GET_PIECE, $pieceNumber, $language);
+        $array = $this->getArray($data);
+
+        return $array['data']['@attributes'];
     }
 
     /**
      * @param string $pieceNumber
      * @param string $language
-     * @return bool|string
+     *
+     * @return array
      */
-    public function getPieceDetail(string $pieceNumber, string $language = RequestBuilder::LANG_EN)
+    public function getDetailsAndEvents(string $pieceNumber, string $language = RequestBuilder::LANG_EN)
     {
-        return $this->call(static::OPERATION_GET_PIECE_DETAIL, $pieceNumber, $language);
+        $data = $this->call(static::OPERATION_GET_PIECE_DETAIL, $pieceNumber, $language);
+        $array = $this->getArray($data);
+        $events = @$array['data']['data']['data'];
+
+        return ['details' => $array['data']['@attributes'], 'events' => !empty($events) ? $this->getEvents($events) : []];
     }
 
     /**
      * @param string $pieceNumber
      * @param string $language
-     * @return bool|string
+     *
+     * @return mixed
      */
-    public function getPiecePublic(string $pieceNumber, string $language = RequestBuilder::LANG_EN)
+    public function getSignature(string $pieceNumber, string $language = RequestBuilder::LANG_EN)
     {
-        return $this->callPublic(static::OPERATION_STATUS_PUBLIC, $pieceNumber, $language);
+        $data = $this->call(static::OPERATION_SIGNATURE, $pieceNumber, $language);
+        $array = $this->getArray($data);
+
+        return $array['data']['@attributes'];
     }
 
     /**
-     * @param string $operation
-     * @param string $pieceCode
+     * @param string $pieceNumber
      * @param string $language
-     * @return bool|string
+     *
+     * @return array
+     */
+    public function getPublicDetails(string $pieceNumber, string $language = RequestBuilder::LANG_EN)
+    {
+        $data = $this->callPublic(static::OPERATION_STATUS_PUBLIC, $pieceNumber, $language);
+        $array = $this->getArray($data);
+        $events = @$array['data']['data']['data'];
+
+        return ['details' => $array['data']['data']['@attributes'], 'events' => !empty($events) ? $this->getEvents($events) : []];
+    }
+
+    /**
+     * @param $data
+     *
+     * @return array
+     */
+    private function getEvents($data)
+    {
+        foreach ($data as $event) {
+            $events[] = $event['@attributes'];
+        }
+
+        return array_reverse($events);
+    }
+
+    /**
+     * @param        $operation
+     * @param        $pieceCode
+     * @param string $language
+     *
+     * @return mixed
      */
     private function call($operation, $pieceCode, string $language = RequestBuilder::LANG_EN)
     {
         $request = RequestBuilder::createRequestXML($operation, $this->credentials->tnt_user, $this->credentials->tnt_password, $language, $pieceCode);
-        $context = stream_context_create(
-            array(
-                'http' => array(
-                    'header' => 'Authorization: Basic ' . base64_encode($this->credentials->cig_user . ':' . $this->credentials->cig_password) . "\r\n" .
-                        "Content-type: text/xml \r\n"
-                )
-            )
+        $client = new Client();
+        $res = $client->request(
+            'GET', $this->credentials->cig_endpoint . '?xml=' . urlencode($request), [
+            'auth' => [$this->credentials->cig_user, $this->credentials->cig_password]
+        ]
         );
 
-        $response = file_get_contents($this->credentials->cig_endpoint . '?xml=' . urlencode($request), false, $context);
-
-        return $this->xmlpp($response);
+        return $res->getBody();
     }
 
     /**
-     * @param string $operation
-     * @param string $pieceCode
+     * @param        $operation
+     * @param        $pieceCode
      * @param string $language
-     * @return bool|string
+     *
+     * @return mixed
      */
     private function callPublic($operation, $pieceCode, string $language = RequestBuilder::LANG_EN)
     {
         $request = RequestBuilder::createRequestPublicXML($operation, $this->credentials->tnt_user, $this->credentials->tnt_password, $language, $pieceCode);
-        $context = stream_context_create(
-            array(
-                'http' => array(
-                    'header' => 'Authorization: Basic ' . base64_encode($this->credentials->cig_user . ':' . $this->credentials->cig_password) . "\r\n" .
-                        "Content-type: text/xml \r\n"
-                )
-            )
+        $client = new Client();
+        $res = $client->request(
+            'GET', $this->credentials->cig_endpoint . '?xml=' . urlencode($request), [
+            'auth' => [$this->credentials->cig_user, $this->credentials->cig_password]
+        ]
         );
 
-        $response = file_get_contents($this->credentials->cig_endpoint . '?xml=' . urlencode($request), false, $context);
-
-        return $this->xmlpp($response);
+        return $res->getBody();
     }
 
-    public function xmlpp($xml, $html_output = false)
+    /**
+     * @param $xml
+     *
+     * @return mixed
+     */
+    private function getArray($xml)
     {
-        $xml_obj = new \SimpleXMLElement($xml);
-        $level = 4;
-        $indent = 0; // current indentation level
-        $pretty = array();
+        $xml = simplexml_load_string($xml);
+        $json = json_encode($xml);
 
-        // get an array containing each XML element
-        $xml = explode("\n", preg_replace('/>\s*</', ">\n<", $xml_obj->asXML()));
-
-        // shift off opening XML tag if present
-        if (count($xml) && preg_match('/^<\?\s*xml/', $xml[0])) {
-            $pretty[] = array_shift($xml);
-        }
-
-        foreach ($xml as $el) {
-            if (preg_match('/^<([\w])+[^>\/]*>$/U', $el)) {
-                // opening tag, increase indent
-                $pretty[] = str_repeat(' ', $indent) . $el;
-                $indent += $level;
-            } else {
-                if (preg_match('/^<\/.+>$/', $el)) {
-                    $indent -= $level;  // closing tag, decrease indent
-                }
-                if ($indent < 0) {
-                    $indent += $level;
-                }
-                $pretty[] = str_repeat(' ', $indent) . $el;
-            }
-        }
-        $xml = implode("\n", $pretty);
-        return $html_output ? htmlentities($xml) : $xml;
+        return json_decode($json, true);
     }
 }

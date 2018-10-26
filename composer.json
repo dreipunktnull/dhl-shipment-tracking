@@ -7,10 +7,15 @@
     {
       "name": "Cedric Ziel",
       "email": "ziel@dreipunktnull.com"
+    },
+    {
+      "name": "Tobias Merkl",
+      "email": "tobias@merkl.eu"
     }
   ],
   "require": {
-    "php": "^7.0"
+    "php": "^7.0",
+    "guzzlehttp/guzzle": "~6.0"
   },
   "autoload": {
     "psr-4": {

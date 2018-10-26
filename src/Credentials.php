@@ -2,10 +2,22 @@
 
 namespace DPN\DHLShipmentTracking;
 
+/**
+ * Class Credentials
+ *
+ * @package DPN\DHLShipmentTracking
+ */
 class Credentials
 {
+
+    /**
+     * API endpoint sandbox
+     */
     const ENDPOINT_SANDBOX = 'https://cig.dhl.de/services/sandbox/rest/sendungsverfolgung';
 
+    /**
+     * API endpoint production
+     */
     const ENDPOINT_PRODUCTION = 'https://cig.dhl.de/services/production/rest/sendungsverfolgung';
 
     /**
@@ -32,6 +44,8 @@ class Credentials
     public $tnt_password;
 
     /**
+     * The constructor ...
+     *
      * @param string $cig_user
      * @param string $cig_password
      * @param string $cig_endpoint

@@ -1,5 +1,7 @@
 # DHL Shipment Tracking for PHP
 
+https://entwickler.dhl.de/group/ep/wsapis/sendungsverfolgung
+
 ## Installation
 
 ```
@@ -8,32 +10,17 @@ composer require dreipunktnull/dhl-shipment-tracking
 
 ## Usage
 
-```php
-/**
- * Creates a new Credentials object.
- *
- * Uses the sandbox as default API where
- *   - $tnt_user = track n trace user
- *   - $tnt_password = track n trace password
- */
+see [track.php](/blob/master/track.php)
 
-$cig_user = ''; // your developer id
-$cig_password = ''; // developer password
+## Changelog
 
-$tnt_user = 'dhl_entwicklerportal';
-$tnt_password = 'Dhl_123!';
+2018-10-26  update
+- use guzzle
+- improve data response
+- add `d-get-signature`
+- documentation
 
-$credentials = new Credentials($cig_user, $cig_password, Credentials::ENDPOINT_SANDBOX, $tnt_user, $tnt_password);
-
-$api = new ShipmentTracking($credentials);
-
-$pieceNumber = '22....';
-$result = $api->getPiece($pieceNumber, RequestBuilder::LANG_EN);
-
-$result = $api->getPieceDetail($pieceNumber, RequestBuilder::LANG_EN);
-
-$result = $api->getPiecePublic($pieceNumber, RequestBuilder::LANG_EN);
-```
+2017-08-29  release
 
 ## License
 

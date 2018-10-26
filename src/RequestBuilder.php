@@ -2,16 +2,52 @@
 
 namespace DPN\DHLShipmentTracking;
 
+/**
+ * Class RequestBuilder
+ *
+ * @package DPN\DHLShipmentTracking
+ */
 class RequestBuilder
 {
+
+    /**
+     * Attribute root
+     */
     const ATTR_ROOT = 'data';
+
+    /**
+     * Attribute password
+     */
     const ATTR_PASSWORD = 'password';
+
+    /**
+     * Attribute app name
+     */
     const ATTR_APPNAME = 'appname';
+
+    /**
+     * Attribute request
+     */
     const ATTR_REQUEST = 'request';
+
+    /**
+     * Attribute language code
+     */
     const ATTR_LANG = 'language-code';
+
+    /**
+     * Attribute piece code
+     */
     const ATTR_PIECE_CODE = 'piece-code';
 
+    /**
+     * Language code DE
+     */
     const LANG_DE = 'de';
+
+    /**
+     * Language code EN
+     */
     const LANG_EN = 'en';
 
     /**
@@ -35,7 +71,7 @@ class RequestBuilder
 
         return $xml->asXML();
     }
-
+    
     /**
      * Creates the request data for a "Public XML" Request.
      *
@@ -54,7 +90,8 @@ class RequestBuilder
         $xml->addAttribute(static::ATTR_REQUEST, $operation);
         $xml->addAttribute(static::ATTR_LANG, $language);
         $xml->addChild(static::ATTR_ROOT)->addAttribute(static::ATTR_PIECE_CODE, $pieceCode);
-
+        
         return $xml->asXML();
     }
+
 }
