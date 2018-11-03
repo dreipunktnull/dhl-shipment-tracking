@@ -4,11 +4,6 @@ namespace DPN\DHLShipmentTracking;
 
 use GuzzleHttp\Client;
 
-/**
- * Class ShipmentTracking
- *
- * @package DPN\DHLShipmentTracking
- */
 class ShipmentTracking
 {
 
@@ -49,7 +44,7 @@ class ShipmentTracking
      * @param string $pieceNumber
      * @param string $language
      *
-     * @return mixed
+     * @return array
      */
     public function getDetails(string $pieceNumber, string $language = RequestBuilder::LANG_EN)
     {
@@ -78,7 +73,7 @@ class ShipmentTracking
      * @param string $pieceNumber
      * @param string $language
      *
-     * @return mixed
+     * @return array
      */
     public function getSignature(string $pieceNumber, string $language = RequestBuilder::LANG_EN)
     {
@@ -104,7 +99,7 @@ class ShipmentTracking
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
@@ -118,11 +113,11 @@ class ShipmentTracking
     }
 
     /**
-     * @param        $operation
-     * @param        $pieceCode
+     * @param string $operation
+     * @param string $pieceCode
      * @param string $language
      *
-     * @return mixed
+     * @return string
      */
     private function call($operation, $pieceCode, string $language = RequestBuilder::LANG_EN)
     {
@@ -138,11 +133,11 @@ class ShipmentTracking
     }
 
     /**
-     * @param        $operation
-     * @param        $pieceCode
+     * @param string $operation
+     * @param string $pieceCode
      * @param string $language
      *
-     * @return mixed
+     * @return string
      */
     private function callPublic($operation, $pieceCode, string $language = RequestBuilder::LANG_EN)
     {
@@ -158,9 +153,9 @@ class ShipmentTracking
     }
 
     /**
-     * @param $xml
+     * @param string $xml
      *
-     * @return mixed
+     * @return array
      */
     private function getArray($xml)
     {

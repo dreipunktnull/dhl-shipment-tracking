@@ -2,11 +2,6 @@
 
 namespace DPN\DHLShipmentTracking;
 
-/**
- * Class RequestBuilder
- *
- * @package DPN\DHLShipmentTracking
- */
 class RequestBuilder
 {
 
@@ -51,8 +46,6 @@ class RequestBuilder
     const LANG_EN = 'en';
 
     /**
-     * Creates the request data for a XML Request.
-     *
      * @param string $operation
      * @param string $appname
      * @param string $password

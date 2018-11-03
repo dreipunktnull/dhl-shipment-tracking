@@ -2,11 +2,6 @@
 
 namespace DPN\DHLShipmentTracking;
 
-/**
- * Class Credentials
- *
- * @package DPN\DHLShipmentTracking
- */
 class Credentials
 {
 
@@ -44,8 +39,6 @@ class Credentials
     public $tnt_password;
 
     /**
-     * The constructor ...
-     *
      * @param string $cig_user
      * @param string $cig_password
      * @param string $cig_endpoint
