@@ -4,8 +4,15 @@ namespace DPN\DHLShipmentTracking;
 
 class Credentials
 {
+
+    /**
+     * API endpoint sandbox
+     */
     const ENDPOINT_SANDBOX = 'https://cig.dhl.de/services/sandbox/rest/sendungsverfolgung';
 
+    /**
+     * API endpoint production
+     */
     const ENDPOINT_PRODUCTION = 'https://cig.dhl.de/services/production/rest/sendungsverfolgung';
 
     /**
